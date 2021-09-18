@@ -58,6 +58,7 @@ public class JobController {
 	        JobDetail job = JobBuilder.newJob(cls).withIdentity(quartz.getJobName(),
 	        		quartz.getJobGroup())
 	        		.withDescription(quartz.getDescription()).build();
+            job.getJobDataMap().put("jobMethodName", quartz.getJobMethodName());
 	        // 触发时间点
 	        CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(quartz.getCronExpression());
 	        Trigger trigger = TriggerBuilder.newTrigger().withIdentity("trigger"+quartz.getJobName(), quartz.getJobGroup())
@@ -72,7 +73,7 @@ public class JobController {
 	}
 	@ApiOperation(value="任务列表")
 	@PostMapping("/list")
-	public Result list(QuartzEntity quartz,Integer pageNo,Integer pageSize){
+	public Result list(QuartzEntity quartz,Integer pageNo,Integer pageSize) throws SchedulerException {
 		LOGGER.info("任务列表");
 		List<QuartzEntity> list = jobService.listQuartzEntity(quartz, pageNo, pageSize);
 		return Result.ok(list);

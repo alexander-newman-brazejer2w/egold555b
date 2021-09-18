@@ -35,6 +35,9 @@
 	        <Form-item label="执行类" prop="jobClassName">
 	            <i-input v-model="formQuartz.jobClassName" :value.sync="formQuartz.jobClassName" placeholder="请输入执行类"></i-input>
 	        </Form-item>
+            <Form-item label="执行方法" prop="jobMethodName">
+                <i-input v-model="formQuartz.jobMethodName" :value.sync="formQuartz.jobMethodName" placeholder="请输入执行类"></i-input>
+            </Form-item>
 	        <Form-item label="执行时间" prop="cronExpression">
 	            <i-input v-model="formQuartz.cronExpression" :value.sync="formQuartz.cronExpression" placeholder="请输入任务执行时间"></i-input>
 	        </Form-item>
@@ -49,15 +52,19 @@ var vm = new Vue({
 			jobName : '',
 			jobGroup : '',
 			description : '',
-			jobClassName : '',
+			jobClassName : 'com.itstyle.quartz.job.ChickenJob',
 			cronExpression : '',
 			//旧任务名称  用于修改
 			oldJobName : '',
-			oldJobGroup : ''
+			oldJobGroup : '',
+			jobMethodName:''
         },
         ruleValidate: {
         	jobName: [
                 { required: true, message: '任务名称不能为空', trigger: 'blur' }
+            ],
+            jobMethodName: [
+                { required: true, message: '执行方法不能为空', trigger: 'blur' }
             ],
             jobGroup: [
                 { required: true, message: '任务分组不能为空', trigger: 'blur' }
@@ -89,8 +96,8 @@ var vm = new Vue({
 				data:quartz,
 				success: function(result) {
 					if(result.code=="0"){
-						//window.parent.location.reload();
-						$(window.parent.document).contents().find('#app')[0].contentWindow.vm.load();
+						window.parent.location.reload();
+						//$(window.parent.document).contents().find('#app')[0].contentWindow.vm.load();
 					}else{
 						vm.$Notice.error({
 		                    desc:  '系统异常'

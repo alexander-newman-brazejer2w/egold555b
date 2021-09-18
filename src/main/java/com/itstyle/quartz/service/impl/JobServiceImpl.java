@@ -1,7 +1,12 @@
 package com.itstyle.quartz.service.impl;
 import java.util.List;
 
+import org.quartz.JobDetail;
+import org.quartz.JobKey;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -13,10 +18,12 @@ public class JobServiceImpl implements IJobService {
 
 	@Autowired
 	private DynamicQuery dynamicQuery;
+    @Autowired @Qualifier("Scheduler")
+    private Scheduler scheduler;
 
 	@Override
 	public List<QuartzEntity> listQuartzEntity(QuartzEntity quartz,
-			Integer pageNo, Integer pageSize) {
+			Integer pageNo, Integer pageSize) throws SchedulerException {
 		StringBuffer nativeSql = new StringBuffer();
 		nativeSql.append("SELECT job.JOB_NAME as jobName,job.JOB_GROUP as jobGroup,job.DESCRIPTION as description,job.JOB_CLASS_NAME as jobClassName,");
 		nativeSql.append("cron.CRON_EXPRESSION as cronExpression,tri.TRIGGER_NAME as triggerName,tri.TRIGGER_STATE as triggerState,");
@@ -29,7 +36,13 @@ public class JobServiceImpl implements IJobService {
 			nativeSql.append(" AND job.JOB_NAME = ?");
 			params = new Object[]{quartz.getJobName()};
 		}
-		return dynamicQuery.nativeQueryListModel(QuartzEntity.class, nativeSql.toString(),params);
+        List<QuartzEntity> list = dynamicQuery.nativeQueryListModel(QuartzEntity.class, nativeSql.toString(), params);
+        for (QuartzEntity quartzEntity : list) {
+            JobKey key = new JobKey(quartzEntity.getJobName(), quartzEntity.getJobGroup());
+            JobDetail jobDetail = scheduler.getJobDetail(key);
+            quartzEntity.setJobMethodName(jobDetail.getJobDataMap().getString("jobMethodName"));
+        }
+        return list;
 	}
 
 	@Override

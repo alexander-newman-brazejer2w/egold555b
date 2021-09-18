@@ -31,8 +31,7 @@ public class TaskRunner implements ApplicationRunner{
 	@Autowired @Qualifier("Scheduler")
     private Scheduler scheduler;
 	
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override
+    @Override
     public void run(ApplicationArguments var) throws Exception{
     	Long count = jobService.listQuartzEntity(null);
     	if(count==0){
@@ -42,14 +41,16 @@ public class TaskRunner implements ApplicationRunner{
     		quartz.setJobGroup("test");
     		quartz.setDescription("测试任务");
     		quartz.setJobClassName("com.itstyle.quartz.job.ChickenJob");
-    		quartz.setCronExpression("0/20 * * * * ?");
+    		quartz.setCronExpression("*/5 * * * * ?");
+            quartz.setJobMethodName("test1");
    	        Class cls = Class.forName(quartz.getJobClassName()) ;
    	        cls.newInstance();
    	        //构建job信息
    	        JobDetail job = JobBuilder.newJob(cls).withIdentity(quartz.getJobName(),
    	        		quartz.getJobGroup())
    	        		.withDescription(quartz.getDescription()).build();
-   	        // 触发时间点
+            job.getJobDataMap().put("jobMethodName", "test1");
+            // 触发时间点
    	        CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(quartz.getCronExpression());
    	        Trigger trigger = TriggerBuilder.newTrigger().withIdentity("trigger"+quartz.getJobName(), quartz.getJobGroup())
    	                .startNow().withSchedule(cronScheduleBuilder).build();	
