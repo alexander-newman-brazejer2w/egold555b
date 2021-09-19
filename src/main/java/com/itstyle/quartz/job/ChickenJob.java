@@ -20,6 +20,9 @@ public class ChickenJob implements  Job,Serializable {
     public void execute(JobExecutionContext context){
         JobDetail jobDetail = context.getJobDetail();
         JobDataMap dataMap = jobDetail.getJobDataMap();
+        /**
+         * 获取任务中保存的方法名字，动态调用方法
+         */
         String methodName = dataMap.getString("jobMethodName");
         try {
             ChickenJob job = new ChickenJob();
