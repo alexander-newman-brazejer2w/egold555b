@@ -1,21 +1,9 @@
 package com.itstyle.quartz.web;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
-import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.quartz.CronScheduleBuilder;
-import org.quartz.JobBuilder;
-import org.quartz.JobDetail;
-import org.quartz.JobKey;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.Trigger;
-import org.quartz.TriggerBuilder;
-import org.quartz.TriggerKey;
+import com.itstyle.quartz.entity.QuartzEntity;
+import com.itstyle.quartz.entity.Result;
+import com.itstyle.quartz.service.IJobService;
+import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.itstyle.quartz.entity.QuartzEntity;
-import com.itstyle.quartz.entity.Result;
-import com.itstyle.quartz.service.IJobService;
-@Api(tags ="Quartz任务")
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+
 @RestController
 @RequestMapping("/job")
 public class JobController {
@@ -39,8 +26,6 @@ public class JobController {
     @Autowired
     private IJobService jobService;
     
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@ApiOperation(value="新建任务")
 	@PostMapping("/add")
 	public Result save(QuartzEntity quartz){
 		LOGGER.info("新增任务");
@@ -71,14 +56,14 @@ public class JobController {
 		}
 		return Result.ok();
 	}
-	@ApiOperation(value="任务列表")
+
 	@PostMapping("/list")
 	public Result list(QuartzEntity quartz,Integer pageNo,Integer pageSize) throws SchedulerException {
 		LOGGER.info("任务列表");
 		List<QuartzEntity> list = jobService.listQuartzEntity(quartz, pageNo, pageSize);
 		return Result.ok(list);
 	}
-	@ApiOperation(value="触发任务")
+
 	@PostMapping("/trigger")
 	public  Result trigger(QuartzEntity quartz,HttpServletResponse response) {
 		try {
@@ -114,7 +99,6 @@ public class JobController {
 		}
 		return Result.ok();
 	}
-	@ApiOperation(value="移除任务")
 	@PostMapping("/remove")
 	public  Result remove(QuartzEntity quartz,HttpServletResponse response) {
 		try {  

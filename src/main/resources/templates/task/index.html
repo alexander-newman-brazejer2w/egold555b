@@ -235,10 +235,9 @@ var vm = new Vue({
 			dialogOpen({
 				title: '新增',
 				url: 'task/add.shtml',
-				//屏幕小 滚动条显示
 				scroll : true,
-				width: '450px',
-				height: '450px',
+				width: '500px',
+				height: '500px',
 				yes : function(iframeId) {
 					top.frames[iframeId].vm.acceptClick();
 				},
@@ -248,7 +247,6 @@ var vm = new Vue({
 			dialogOpen({
 				title: '修改',
 				url: 'task/add.shtml',
-				//屏幕小 滚动条显示
 				scroll : true,
 				width: '500px',
 				height: '500px',
