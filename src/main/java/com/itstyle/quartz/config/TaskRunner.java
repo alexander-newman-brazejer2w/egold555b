@@ -18,7 +18,7 @@ import com.itstyle.quartz.entity.QuartzEntity;
 import com.itstyle.quartz.service.IJobService;
 /**
  * 初始化一个测试Demo任务
- * 创建者 科帮网
+ * 创建者 爪哇笔记
  * 创建时间	2018年4月3日
  */
 @Component
@@ -33,6 +33,9 @@ public class TaskRunner implements ApplicationRunner{
 	
     @Override
     public void run(ApplicationArguments var) throws Exception{
+        /**
+         * 系统启动的时候会初始化一个任务
+         */
     	Long count = jobService.listQuartzEntity(null);
     	if(count==0){
     		LOGGER.info("初始化测试任务");

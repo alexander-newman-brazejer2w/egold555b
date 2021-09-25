@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * 启动类
- * 创建者 科帮网
+ * 创建者 爪哇笔记
  * 创建时间	2018年3月28日
  * API接口测试：http://localhost:8080/quartz/swagger-ui.html
  */
