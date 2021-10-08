@@ -8,17 +8,16 @@ import java.util.List;
  */
 public interface DynamicQuery {
 
-	public void save(Object entity);
+	 void save(Object entity);
 
-	public void update(Object entity);
+	 void update(Object entity);
 
-	public <T> void delete(Class<T> entityClass, Object entityid);
+	 <T> void delete(Class<T> entityClass, Object entityid);
 
-	public <T> void delete(Class<T> entityClass, Object[] entityids);
+	 <T> void delete(Class<T> entityClass, Object[] entityids);
 	
 	 /**
      * 查询对象列表，返回List
-     * @param resultClass
      * @param nativeSql
      * @param params
      * @return  List<T>
@@ -61,6 +60,5 @@ public interface DynamicQuery {
 	 * @return 统计条数
 	 */
 	Long nativeQueryCount(String nativeSql, Object... params);
-
 
 }
